@@ -22,15 +22,19 @@ def get_stress_for_different_dimensions(dm, max_dim=5):
 
 def get_embedding(dm, dim):
 
+    # Return embedding space
     return MDS(n_components=dim, metric=True, dissimilarity="precomputed").fit_transform(dm)
 
 
 def visualize(data, dim=2):
 
+    # Visualize the new embeddig
+
     fig = plt.figure()
 
     if dim == 1:
 
+        # 1D plot is not useful
         for k in range(data.shape[0]):
 
             plt.scatter(data[k:k+1, 0], None)
@@ -43,15 +47,7 @@ def visualize(data, dim=2):
 
             ax.scatter(data[k:k+1, 0], data[k:k+1, 1])
 
-    elif dim == 3:
-
-        ax = fig.add_subplot(111, projection='3d')
-
-        for k in range(data.shape[0]):
-
-            ax.scatter(data[k:k+1, 0], data[k:k + 1, 1], data[k:k+1, 2])
-
-    if not (dim == 1 or dim == 3):
+        # Line segments are only applicable for 2D
         segments = [[data[i, :], data[j, :]]
                     for i in range(data.shape[0]) for j in range(data.shape[0])]
 
@@ -59,6 +55,15 @@ def visualize(data, dim=2):
                             zorder=0, cmap=plt.cm.Blues)
         lc.set_linewidths(np.full(len(segments), 0.5))
         ax.add_collection(lc)
+
+
+    elif dim == 3:
+
+        ax = fig.add_subplot(111, projection='3d')
+
+        for k in range(data.shape[0]):
+
+            ax.scatter(data[k:k+1, 0], data[k:k + 1, 1], data[k:k+1, 2])
 
 
     plt.title("Embeddings in {0} dimension".format(str(dim)))
